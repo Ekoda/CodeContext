@@ -20,6 +20,7 @@ This script marks an interesting point in tech history. Right now, Language Lear
     ```bash
     python path/to/context.py dir  # For Directory Structure
     python path/to/context.py env  # For Environment Details
+    python path/to/context.py llm  # For Context Details (requires LLM tag in readme)
     python path/to/context.py      # For complete snapshot (default)
     ```
 5. The selected project snapshot information will be printed to the terminal.
