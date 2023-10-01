@@ -111,6 +111,18 @@ def get_environment_details():
 
     return details
 
+def get_llm_info(rootdir):
+    readme_path = os.path.join(rootdir, 'README.md')
+    if os.path.exists(readme_path):
+        with open(readme_path, 'r', encoding='utf-8') as file:
+            content = file.read()
+            llm_start = content.find('<!--LLM-->')
+            llm_end = content.find('<!--LLM-->', llm_start + 1)
+            if llm_start != -1 and llm_end != -1:
+                llm_info = content[llm_start + len('<!--LLM-->'): llm_end].strip()
+                return llm_info
+    return None
+
 def main():
     parser = argparse.ArgumentParser(description='Generate project snapshot.')
     parser.add_argument('--command', default='all', choices=['dir', 'env', 'all'], help='Command to execute. Choose "dir" for directory structure, "env" for environment details, or "all" for complete snapshot.')
@@ -124,6 +136,11 @@ def main():
 
     if args.command == 'env' or args.command == 'all':
         print(f"Environment Details:\n{get_environment_details()}\n")
+
+    if args.command == 'llm' or args.command == 'all':
+        llm_info = get_llm_info(args.rootdir)
+        if llm_info:
+            print(f"Project Context:\n{llm_info}\n")
 
     if args.command == 'all':
         print(f"Dependencies:\n{get_dependencies(args.rootdir)}\n")

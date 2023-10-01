@@ -22,6 +22,15 @@ CodeContext is a utility script designed to generate a detailed snapshot of a pr
     ```
 5. The selected project snapshot information will be printed to the terminal.
 
+## LLM Tag Usage
+
+The LLM tag is specifically designed to encapsulate project context for Language Models (LLMs). By delineating infromation such as the objectives and challenges of the project within the LLM tags, you provide a structured narrative that can help LLMs better understand the project’s context. This is particularly useful when initiating conversations with LLMs, ensuring they have the necessary background to provide insightful responses.
+
+You can even include code snippets and instructions for how you prefer to code or other instructions.
+
+To incorporate the LLM tag in your project:
+- Enclose the relevant project context information within `<!--LLM-->` tags in your README file.
+
 ## Configuration
 
 - To tailor the script to your project’s specific needs, you may modify the `generate_project_snapshot` function in `context.py`.
@@ -30,3 +39,13 @@ CodeContext is a utility script designed to generate a detailed snapshot of a pr
 ## Contribution
 
 Your contributions are welcome! Feel free to fork this repository, make enhancements, and submit pull requests. For substantial changes, please open an issue first to discuss your proposed changes.
+
+## Project Context
+<!--LLM-->
+### Objectives:
+- Automate project snapshot generation for enhanced team and LLM communication.
+
+### Challenges:
+- Accurate cross-language dependency enumeration.
+- Readable directory structure representation.
+<!--LLM-->
