@@ -16,23 +16,41 @@ def get_gitignore_patterns(rootdir):
 def is_ignored(path, ignore_patterns):
     return any(fnmatch.fnmatch(path, pattern) for pattern in ignore_patterns)
 
-def get_directory_structure(rootdir):
-    """Gets the directory structure starting from rootdir, excluding certain files/folders."""
+def get_directory_structure(rootdir, ignore_patterns=[], prefix="", is_last=False):
+    """Recursively gets the directory structure starting from rootdir."""
     dir_structure = []
-    ignore_patterns = get_gitignore_patterns(rootdir)
-    for dirpath, dirnames, filenames in os.walk(rootdir):
-        dirnames[:] = [d for d in dirnames if not is_ignored(d, ignore_patterns)]
-        filenames[:] = [f for f in filenames if not is_ignored(f, ignore_patterns)]
+
+    # Explicitly ignore certain directories
+    explicit_ignore = ['.git', '__pycache__']
+    
+    # List directories and files, filtering out those that match ignore patterns
+    dirnames = [d for d in os.listdir(rootdir) if os.path.isdir(os.path.join(rootdir, d))]
+    dirnames = [d for d in dirnames if not is_ignored(d, ignore_patterns) and d not in explicit_ignore]
+    
+    filenames = [f for f in os.listdir(rootdir) if os.path.isfile(os.path.join(rootdir, f))]
+    filenames = [f for f in filenames if not is_ignored(f, ignore_patterns)]
+    
+    # Combine files and directories
+    all_names = dirnames + filenames
+    all_names.sort()
+
+    # Record the current directory in the output list
+    if prefix:
+        dir_structure.append(f"{prefix}{'└── ' if is_last else '├── '}{os.path.basename(rootdir)}")
+
+    # Record the files and subdirectories
+    for i, name in enumerate(all_names):
+        is_last_item = i == len(all_names) - 1
+        new_prefix = f"{prefix}{'    ' if is_last else '│   '}"
         
-        if '.git' in dirnames:
-            dirnames.remove('.git')  
-        if '__pycache__' in dirnames:
-            dirnames.remove('__pycache__')
-        
-        structure = f"{dirpath}\n"
-        structure += '\n'.join([f"|-- {file}" for file in filenames if not file.endswith(('.gitignore',))])
-        dir_structure.append(structure)
-    return '\n'.join(dir_structure)
+        if name in filenames:
+            dir_structure.append(f"{new_prefix}{'└── ' if is_last_item else '├── '}{name}")
+        else:
+            subdir_path = os.path.join(rootdir, name)
+            dir_structure.extend(get_directory_structure(subdir_path, ignore_patterns, new_prefix, is_last_item))
+    
+    return dir_structure
+
 
 def get_dependencies(rootdir):
     """Gets project dependencies in a compact form."""
@@ -130,17 +148,19 @@ def main():
     args = parser.parse_args()
 
     print(f"Project:\n{os.path.basename(os.path.abspath(args.rootdir))}\n")
-
-    if args.command == 'dir' or args.command == 'all':
-        print(f"Directory Structure:\n{get_directory_structure(args.rootdir)}\n")
-
-    if args.command == 'env' or args.command == 'all':
-        print(f"Environment Details:\n{get_environment_details()}\n")
-
+    
     if args.command == 'llm' or args.command == 'all':
         llm_info = get_llm_info(args.rootdir)
         if llm_info:
             print(f"Project Context:\n{llm_info}\n")
+
+    if args.command == 'dir' or args.command == 'all':
+        dir_structure = get_directory_structure(args.rootdir, get_gitignore_patterns(args.rootdir))
+        dir_structure_str = '\n'.join(dir_structure)
+        print(f"Directory Structure:\n{dir_structure_str}\n")
+
+    if args.command == 'env' or args.command == 'all':
+        print(f"Environment Details:\n{get_environment_details()}\n")
 
     if args.command == 'all':
         print(f"Dependencies:\n{get_dependencies(args.rootdir)}\n")
