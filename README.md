@@ -2,6 +2,8 @@
 
 CodeContext is a utility script designed to generate a detailed snapshot of a project's structure, dependencies, recent commits, and environment specifics. This snapshot is crafted to provide a comprehensive yet succinct overview of the project at any given point in time, aiding in effective communication with Language Models (LLMs) and team members.
 
+This script marks an interesting point in tech history. Right now, Language Learning Models (LLMs), despite being quite powerful, still need a human touch to do well in the engineering domain. I suspect these models will grow in autonomy and eventually not need my input at all. Only time will tell.
+
 ## Features
 
 - **Directory Structure**: Generates a tree-like representation of your project’s file structure, filtering out specified files and directories (e.g., `.git`, `__pycache__`, and items listed in `.gitignore`).
@@ -24,9 +26,9 @@ CodeContext is a utility script designed to generate a detailed snapshot of a pr
 
 ## LLM Tag Usage
 
-The LLM tag is specifically designed to encapsulate project context for Language Models (LLMs). By delineating infromation such as the objectives and challenges of the project within the LLM tags, you provide a structured narrative that can help LLMs better understand the project’s context. This is particularly useful when initiating conversations with LLMs, ensuring they have the necessary background to provide insightful responses.
+The LLM tag is specifically designed to encapsulate project context for Language Models (LLMs). By delineating information such as the objectives and challenges of the project within the LLM tags, you provide a structured narrative that can help LLMs better understand the project’s context. This is particularly useful when initiating conversations with LLMs, ensuring they have the necessary background to provide insightful responses.
 
-You can even include code snippets and instructions for how you prefer to code or other instructions.
+You can even include code snippets and instructions for how you prefer to code.
 
 To incorporate the LLM tag in your project:
 - Enclose the relevant project context information within `<!--LLM-->` tags in your README file.
