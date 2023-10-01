@@ -20,17 +20,15 @@ def get_directory_structure(rootdir, ignore_patterns=[], prefix="", is_last=Fals
     """Recursively gets the directory structure starting from rootdir."""
     dir_structure = []
 
-    # Explicitly ignore certain directories
+    # Ignore these directories
     explicit_ignore = ['.git', '__pycache__']
     
-    # List directories and files, filtering out those that match ignore patterns
     dirnames = [d for d in os.listdir(rootdir) if os.path.isdir(os.path.join(rootdir, d))]
     dirnames = [d for d in dirnames if not is_ignored(d, ignore_patterns) and d not in explicit_ignore]
     
     filenames = [f for f in os.listdir(rootdir) if os.path.isfile(os.path.join(rootdir, f))]
     filenames = [f for f in filenames if not is_ignored(f, ignore_patterns)]
     
-    # Combine files and directories
     all_names = dirnames + filenames
     all_names.sort()
 
@@ -38,7 +36,6 @@ def get_directory_structure(rootdir, ignore_patterns=[], prefix="", is_last=Fals
     if prefix:
         dir_structure.append(f"{prefix}{'└── ' if is_last else '├── '}{os.path.basename(rootdir)}")
 
-    # Record the files and subdirectories
     for i, name in enumerate(all_names):
         is_last_item = i == len(all_names) - 1
         new_prefix = f"{prefix}{'    ' if is_last else '│   '}"
