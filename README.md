@@ -32,7 +32,7 @@ The LLM tag is specifically designed to encapsulate project context for Language
 You can even include code snippets and instructions for how you prefer to code.
 
 To incorporate the LLM tag in your project:
-- Enclose the relevant project context information within  tags in your README file.
+- Enclose the relevant project context information within `<!--LLM-->` tags in your README file.
 
 ## Configuration
 
