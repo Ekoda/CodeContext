@@ -14,25 +14,26 @@ def get_gitignore_patterns(rootdir):
     return []
 
 def is_ignored(path, ignore_patterns):
-    return any(fnmatch.fnmatch(path, pattern) for pattern in ignore_patterns)
+    for pattern in ignore_patterns:
+        if fnmatch.fnmatch(path, pattern):
+            return True
+        if fnmatch.fnmatch(os.path.basename(path), pattern):
+            return True
+    return False
 
 def get_directory_structure(rootdir, ignore_patterns=[], prefix="", is_last=False):
-    """Recursively gets the directory structure starting from rootdir."""
     dir_structure = []
-
-    # Ignore these directories
-    explicit_ignore = ['.git', '__pycache__']
+    explicit_ignore = ['.git', '__pycache__', 'venv', 'env', 'target', '.mvn', 'logs', '*.log', '.next', 'node_modules', '.vercel', 'out', '.idea', '.DS_Store', '.vscode', '*.swp', '*.swo', '*.bak', '*.pyi']
     
-    dirnames = [d for d in os.listdir(rootdir) if os.path.isdir(os.path.join(rootdir, d))]
-    dirnames = [d for d in dirnames if not is_ignored(d, ignore_patterns) and d not in explicit_ignore]
+    dirnames = [d for d in os.listdir(rootdir) if os.path.isdir(os.path.join(rootdir, d)) and not d.startswith('.')]
+    dirnames[:] = [d for d in dirnames if not is_ignored(os.path.join(rootdir, d), ignore_patterns + explicit_ignore)]
     
     filenames = [f for f in os.listdir(rootdir) if os.path.isfile(os.path.join(rootdir, f))]
-    filenames = [f for f in filenames if not is_ignored(f, ignore_patterns)]
+    filenames[:] = [f for f in filenames if not is_ignored(os.path.join(rootdir, f), ignore_patterns)]
     
     all_names = dirnames + filenames
     all_names.sort()
 
-    # Record the current directory in the output list
     if prefix:
         dir_structure.append(f"{prefix}{'└── ' if is_last else '├── '}{os.path.basename(rootdir)}")
 
