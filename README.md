@@ -25,6 +25,8 @@ This script marks an interesting point in tech history. Right now, Language Lear
     ```
 5. The selected project snapshot information will be printed to the terminal.
 
+For simplicity I recommend setting a bash alias for the script, so you can grab the context anywhere easily.
+
 ## LLM Tag Usage
 
 The LLM tag is specifically designed to encapsulate project context for Language Models (LLMs). By delineating information such as the objectives and challenges of the project within the LLM tags, you provide a structured narrative that can help LLMs better understand the project’s context. This is particularly useful when initiating conversations with LLMs, ensuring they have the necessary background to provide insightful responses.
@@ -33,11 +35,6 @@ You can even include code snippets and instructions for how you prefer to code.
 
 To incorporate the LLM tag in your project:
 - Enclose the relevant project context information within `<!--LLM-->` tags in your README file.
-
-## Configuration
-
-- To tailor the script to your project’s specific needs, you may modify the `generate_project_snapshot` function in `context.py`.
-- The root directory of your project is specified by the `root_directory` variable in the `__main__` section at the bottom of `context.py`, or it can be passed as an argument when running the script.
 
 ## Contribution
 
